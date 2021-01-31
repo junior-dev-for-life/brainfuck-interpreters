@@ -1,4 +1,5 @@
 use std::char;
+use std::io;
 
 fn main() {
     let program = "++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.";
@@ -6,7 +7,7 @@ fn main() {
 }
 
 fn interpret(program: &str) {
-    let mut tape: Vec<u32> = vec![0; 100];
+    let mut tape: Vec<i32> = vec![0; 100];
     let mut stack: Vec<usize> = vec![];
     let mut ptr: usize = 0;
     let mut is_looping = false;
@@ -38,12 +39,16 @@ fn interpret(program: &str) {
             '>' => ptr = ptr + 1,
             '<' => ptr = ptr - 1,
             '.' => {
-                if let Some(c) = char::from_u32(tape[ptr]) {
+                if let Some(c) = char::from_u32(tape[ptr] as u32) {
                     print!("{}", c);
                 } else {
                     panic!("Not a valid character");
                 }
             },
+            ',' => {
+                let input = read_input();
+                tape[ptr] = input;
+            }
             '[' => {
                 if tape[ptr] != 0 {
                     stack.push(i);
@@ -67,5 +72,15 @@ fn interpret(program: &str) {
         }
 
         i = i + 1;
+    }
+}
+
+fn read_input() -> i32 {
+    let mut input = String::new();
+    io::stdin().read_line(&mut input).expect("Failed to read user input");
+    let trimmed = input.trim();
+    match trimmed.parse::<i32>() {
+        Ok(i) => return i,
+        Err(_) => panic!("Error reading user input")
     }
 }
