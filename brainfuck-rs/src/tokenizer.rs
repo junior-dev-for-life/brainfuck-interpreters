@@ -91,4 +91,12 @@ mod tests {
         assert_eq!(tokens.len(), 1);
         assert_eq!(tokens[0], Token::LoopEnd);
     }
+
+    #[test]
+    fn ignore_whitespaces() {
+        let tokens = get_tokens("\n +\t-");
+        assert_eq!(tokens.len(), 2);
+        assert_eq!(tokens[0], Token::Increment);
+        assert_eq!(tokens[1], Token::Decrement);
+    }
 }
