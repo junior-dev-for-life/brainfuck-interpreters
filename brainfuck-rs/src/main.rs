@@ -1,9 +1,14 @@
 use std::char;
 use std::io;
+use std::fs;
+use std::env;
 
 fn main() {
-    let program = "++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.";
-    interpret(program);
+    let args: Vec<String> = env::args().collect();
+    let filename = &args[1];
+    let contents = fs::read_to_string(filename).expect("Something went wrong reading the file");
+    let program: String = contents.chars().filter(|c| !c.is_whitespace()).collect();
+    interpret(&program);
 }
 
 fn interpret(program: &str) {
