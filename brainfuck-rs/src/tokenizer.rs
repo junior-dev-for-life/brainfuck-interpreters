@@ -7,7 +7,9 @@ pub enum Token {
     Read,
     Write,
     LoopStart,
-    LoopEnd
+    LoopEnd,
+    Nop,
+    EOF
 }
 
 pub fn get_tokens(input: &str) -> Vec<Token> {
@@ -29,6 +31,8 @@ pub fn get_tokens(input: &str) -> Vec<Token> {
         }
     }
 
+    tokens.push(Token::EOF);
+
     return tokens;
 }
 
@@ -39,63 +43,63 @@ mod tests {
     #[test]
     fn detect_move_right() {
         let tokens = get_tokens(">");
-        assert_eq!(tokens.len(), 1);
+        assert_eq!(tokens.len(), 2);
         assert_eq!(tokens[0], Token::MoveRight);
     }
 
     #[test]
     fn detect_move_left() {
         let tokens = get_tokens("<");
-        assert_eq!(tokens.len(), 1);
+        assert_eq!(tokens.len(), 2);
         assert_eq!(tokens[0], Token::MoveLeft);
     }
 
     #[test]
     fn detect_increment() {
         let tokens = get_tokens("+");
-        assert_eq!(tokens.len(), 1);
+        assert_eq!(tokens.len(), 2);
         assert_eq!(tokens[0], Token::Increment);
     }
 
     #[test]
     fn detect_decrement() {
         let tokens = get_tokens("-");
-        assert_eq!(tokens.len(), 1);
+        assert_eq!(tokens.len(), 2);
         assert_eq!(tokens[0], Token::Decrement);
     }
 
     #[test]
     fn detect_read() {
         let tokens = get_tokens(",");
-        assert_eq!(tokens.len(), 1);
+        assert_eq!(tokens.len(), 2);
         assert_eq!(tokens[0], Token::Read);
     }
 
     #[test]
     fn detect_write() {
         let tokens = get_tokens(".");
-        assert_eq!(tokens.len(), 1);
+        assert_eq!(tokens.len(), 2);
         assert_eq!(tokens[0], Token::Write);
     }
 
     #[test]
     fn detect_loop_start() {
         let tokens = get_tokens("[");
-        assert_eq!(tokens.len(), 1);
+        assert_eq!(tokens.len(), 2);
         assert_eq!(tokens[0], Token::LoopStart);
     }
 
     #[test]
     fn detect_loop_end() {
         let tokens = get_tokens("]");
-        assert_eq!(tokens.len(), 1);
+        assert_eq!(tokens.len(), 2);
         assert_eq!(tokens[0], Token::LoopEnd);
     }
 
     #[test]
     fn ignore_whitespaces() {
         let tokens = get_tokens("\n +\t-");
-        assert_eq!(tokens.len(), 2);
+        assert_eq!(tokens.len(), 3);
         assert_eq!(tokens[0], Token::Increment);
         assert_eq!(tokens[1], Token::Decrement);
     }
